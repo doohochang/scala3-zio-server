@@ -1,11 +1,25 @@
 package io.github.doohochang.szhse
 
+import zio.*
+import zio.clock.Clock
+import zio.blocking.Blocking
+
 import service.*
 import http.service.*
+import http.{Server, ServerImpl}
 
 @main def hello: Unit =
   val serviceLayer = GreetingServiceImpl.layer
-//  val httpServiceLayer = GreetingHttpService.layer
-//  val appLayer = serviceLayer >>> httpServiceLayer
+  val httpServiceLayer = serviceLayer >>> GreetingHttpService.layer
+  val serverLayer: ULayer[Server] =
+    Clock.live ++ Blocking.live ++ httpServiceLayer >>> ServerImpl.layer
 
-  println("Hello world!")
+  val runServer =
+    (for
+      server <- ZIO.environment[Server]
+      _ <- server.run
+    yield ())
+      .provideLayer(serverLayer)
+
+  val exitResult = Runtime.default.unsafeRunSync(runServer)
+  println(exitResult)
