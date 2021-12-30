@@ -1,12 +1,26 @@
-val scala3Version = "3.1.0"
+ThisBuild / organization := "io.github.doohochang"
+ThisBuild / scalaVersion := Versions.scala3
+ThisBuild / version := Versions.build
+
+lazy val infrastructure = project
+  .in(file("infrastructure"))
+  .dependsOn(domain, application)
+
+lazy val domain = project
+  .in(file("domain"))
+
+lazy val application = project
+  .in(file("application"))
+  .dependsOn(domain)
+
+lazy val presentation = project
+  .in(file("presentation"))
+  .dependsOn(application)
 
 lazy val root = project
   .in(file("."))
+  .dependsOn(infrastructure, domain, application, presentation)
+  .aggregate(infrastructure, domain, application, presentation)
   .settings(
-    name := "scala3-zio-http4server-example",
-    version := "0.1.0-SNAPSHOT",
-
-    scalaVersion := scala3Version,
-
-    libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
+    name := "scala3-zio-http4s-server-example"
   )
