@@ -2,6 +2,12 @@ ThisBuild / organization := "io.github.doohochang"
 ThisBuild / scalaVersion := Versions.scala3
 ThisBuild / version := Versions.build
 
+enablePlugins(JavaAppPackaging, DockerPlugin)
+
+dockerBaseImage := "adoptopenjdk/openjdk11"
+Docker / packageName := "scala3-zio-http4s-server-example"
+Docker / version := Versions.build
+
 lazy val infrastructure = project
   .in(file("infrastructure"))
   .dependsOn(domain, application)
