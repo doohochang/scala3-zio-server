@@ -35,3 +35,4 @@ enablePlugins(JavaAppPackaging, DockerPlugin)
 dockerBaseImage := "adoptopenjdk/openjdk11"
 Docker / packageName := "scala3-zio-http4s-server-example"
 Docker / version := Versions.build
+dockerUpdateLatest := true
