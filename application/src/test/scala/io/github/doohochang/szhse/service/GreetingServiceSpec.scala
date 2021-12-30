@@ -1,4 +1,4 @@
-package io.github.doohochang.service
+package io.github.doohochang.szhse.service
 
 import zio.*
 import zio.test.*
@@ -8,7 +8,7 @@ object GreetingServiceSpec extends DefaultRunnableSpec:
 
   def spec =
     testM(
-      "GreetingService should return a valid string for greeting."
+      "GreetingServiceImpl should return a valid string for greeting."
     )(
       for
         env <- ZIO.environment[GreetingService]
