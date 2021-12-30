@@ -6,6 +6,10 @@ object Dependencies {
     "dev.zio" %% "zio-streams" % Versions.zio,
     "dev.zio" %% "zio-interop-cats" % Versions.zioCatsInterop
   )
+  private val zioTest = Seq(
+    "dev.zio" %% "zio-test" % Versions.zio % "test",
+    "dev.zio" %% "zio-test-sbt" % Versions.zio % "test"
+  )
 
   private val http4s = Seq(
     "org.http4s" %% "http4s-dsl" % Versions.http4s,
@@ -24,7 +28,7 @@ object Dependencies {
     "org.slf4j" % "slf4j-api" % Versions.slf4j
   )
 
-  val common = zio ++ cats
+  val common = zio ++ zioTest ++ cats
 
-  val presentation = common ++ http4s ++ logback
+  val presentation = http4s ++ logback
 }

@@ -1,32 +1,19 @@
 ThisBuild / organization := "io.github.doohochang"
 ThisBuild / scalaVersion := Versions.scala3
 ThisBuild / version := Versions.build
-
-enablePlugins(JavaAppPackaging, DockerPlugin)
-
-dockerBaseImage := "adoptopenjdk/openjdk11"
-Docker / packageName := "scala3-zio-http4s-server-example"
-Docker / version := Versions.build
+ThisBuild / libraryDependencies ++= Dependencies.common
+ThisBuild / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 
 lazy val infrastructure = project
   .in(file("infrastructure"))
   .dependsOn(domain, application)
-  .settings(
-    libraryDependencies ++= Dependencies.common
-  )
 
 lazy val domain = project
   .in(file("domain"))
-  .settings(
-    libraryDependencies ++= Dependencies.common
-  )
 
 lazy val application = project
   .in(file("application"))
   .dependsOn(domain)
-  .settings(
-    libraryDependencies ++= Dependencies.common
-  )
 
 lazy val presentation = project
   .in(file("presentation"))
@@ -40,6 +27,11 @@ lazy val root = project
   .dependsOn(infrastructure, domain, application, presentation)
   .aggregate(infrastructure, domain, application, presentation)
   .settings(
-    name := "scala3-zio-http4s-server-example",
-    libraryDependencies ++= Dependencies.common
+    name := "scala3-zio-http4s-server-example"
   )
+
+enablePlugins(JavaAppPackaging, DockerPlugin)
+
+dockerBaseImage := "adoptopenjdk/openjdk11"
+Docker / packageName := "scala3-zio-http4s-server-example"
+Docker / version := Versions.build
