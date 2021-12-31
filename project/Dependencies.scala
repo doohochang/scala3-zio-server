@@ -32,6 +32,12 @@ object Dependencies {
     "com.typesafe" % "config" % Versions.typesafeConfig
   )
 
+  private val doobieConfig = Seq(
+    "org.tpolecat" %% "doobie-core" % Versions.doobie,
+    "org.tpolecat" %% "doobie-hikari" % Versions.doobie, // HikariCP transactor.
+    "org.tpolecat" %% "doobie-postgres" % Versions.doobie // Postgres driver 42.3.1 + type mappings.
+  )
+
   val common = zio ++ zioTest ++ cats
 
   val infrastructure = typesafeConfig

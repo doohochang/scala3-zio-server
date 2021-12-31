@@ -11,4 +11,5 @@ object Versions {
   val logback = "1.3.0-alpha12"
   val slf4j = "2.0.0-alpha5"
   val typesafeConfig = "1.4.1"
+  val doobie = "1.0.0-RC1"
 }
