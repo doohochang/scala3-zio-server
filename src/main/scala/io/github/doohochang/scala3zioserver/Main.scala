@@ -9,7 +9,7 @@ import http.service.*
 import http.{Server, ServerImpl}
 
 @main def main(): Unit =
-  val configLayer = config.layers.serverConfig
+  val configLayer = config.layers.rootConfig >>> config.layers.serverConfig
   val serviceLayer = GreetingServiceImpl.layer
   val httpServiceLayer = serviceLayer >>> GreetingHttpService.layer
   val serverLayer: TaskLayer[Server] =

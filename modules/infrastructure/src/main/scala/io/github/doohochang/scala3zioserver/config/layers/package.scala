@@ -4,11 +4,11 @@ import com.typesafe.config.*
 import zio.*
 
 package object layers:
-  val defaultConfig: TaskLayer[Has[Config]] =
+  val rootConfig: TaskLayer[Has[Config]] =
     ZLayer.fromEffect(Task { ConfigFactory.load() })
 
-  val serverConfig: TaskLayer[Has[ServerConfig]] =
-    defaultConfig >>> ZLayer.fromEffect(
+  val serverConfig: RLayer[Has[Config], Has[ServerConfig]] =
+    ZLayer.fromEffect(
       for
         config <- ZIO.service[Config]
         serverConfig <- ServerConfigLoader(config).load
