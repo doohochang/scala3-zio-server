@@ -27,12 +27,12 @@ lazy val root = project
   .dependsOn(infrastructure, domain, application, presentation)
   .aggregate(infrastructure, domain, application, presentation)
   .settings(
-    name := "scala3-zio-http4s-server-example"
+    name := "scala3-zio-server"
   )
 
 enablePlugins(JavaAppPackaging, DockerPlugin)
 
 dockerBaseImage := "adoptopenjdk/openjdk11"
-Docker / packageName := "scala3-zio-http4s-server-example"
+Docker / packageName := "scala3-zio-server"
 Docker / version := Versions.build
 dockerUpdateLatest := true

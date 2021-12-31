@@ -1,4 +1,4 @@
-package io.github.doohochang.szhse
+package io.github.doohochang.scala3zioserver
 
 import zio.*
 import zio.clock.Clock

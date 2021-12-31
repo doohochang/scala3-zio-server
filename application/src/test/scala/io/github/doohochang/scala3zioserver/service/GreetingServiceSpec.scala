@@ -1,4 +1,4 @@
-package io.github.doohochang.szhse.service
+package io.github.doohochang.scala3zioserver.service
 
 import zio.*
 import zio.test.*
