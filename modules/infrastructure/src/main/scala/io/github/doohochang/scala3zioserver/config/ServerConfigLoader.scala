@@ -9,5 +9,5 @@ class ServerConfigLoader(config: Config):
   def load: Task[ServerConfig] =
     for
       serverConfig <- Task { config.getConfig("server") }
-      port <- Task { serverConfig.getInt("port") }
+      port <- Task { serverConfig.getInt("http.port") }
     yield ServerConfig(port = port)
