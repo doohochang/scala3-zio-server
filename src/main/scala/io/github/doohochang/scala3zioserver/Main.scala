@@ -8,11 +8,12 @@ import service.*
 import http.service.*
 import http.{Server, ServerImpl}
 
-@main def hello: Unit =
+@main def main(): Unit =
+  val configLayer = config.layers.serverConfig
   val serviceLayer = GreetingServiceImpl.layer
   val httpServiceLayer = serviceLayer >>> GreetingHttpService.layer
-  val serverLayer: ULayer[Server] =
-    Clock.live ++ Blocking.live ++ httpServiceLayer >>> ServerImpl.layer
+  val serverLayer: TaskLayer[Server] =
+    Clock.live ++ Blocking.live ++ httpServiceLayer ++ configLayer >>> ServerImpl.layer
 
   val runServer =
     (for

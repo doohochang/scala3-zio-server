@@ -10,4 +10,5 @@ object Versions {
   val http4s = "0.23.7"
   val logback = "1.3.0-alpha12"
   val slf4j = "2.0.0-alpha5"
+  val typesafeConfig = "1.4.1"
 }

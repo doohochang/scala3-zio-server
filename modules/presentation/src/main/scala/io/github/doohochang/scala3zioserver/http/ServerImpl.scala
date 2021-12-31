@@ -1,4 +1,5 @@
-package io.github.doohochang.scala3zioserver.http
+package io.github.doohochang.scala3zioserver
+package http
 
 import cats.effect.*
 import zio.{ExitCode as _, *}
@@ -8,15 +9,15 @@ import zio.interop.catz.*
 import org.http4s.blaze.server.*
 import org.http4s.server.Router
 import org.http4s.server.middleware.Logger
+import config.ServerConfig
+import http.service.*
 
-import service.*
-
-class ServerImpl(greetingService: GreetingHttpService)(using
-    Runtime[Clock with Blocking]
+class ServerImpl(greetingService: GreetingHttpService, config: ServerConfig)(
+    using Runtime[Clock with Blocking]
 ) extends Server:
   private val build: BlazeServerBuilder[Task] =
     BlazeServerBuilder[Task]
-      .bindHttp(port = 8080, host = "0.0.0.0")
+      .bindHttp(port = config.port, host = "0.0.0.0")
       .withHttpApp(
         Logger.httpApp[Task](logHeaders = true, logBody = true)(
           Router[Task]("/" -> greetingService.routes).orNotFound
@@ -28,10 +29,11 @@ class ServerImpl(greetingService: GreetingHttpService)(using
 
 object ServerImpl:
   val layer
-      : URLayer[Has[GreetingHttpService] with Clock with Blocking, Server] =
+      : URLayer[Has[GreetingHttpService] with Has[ServerConfig] with Clock with Blocking, Server] =
     ZLayer.fromEffectMany(
       for
         greetingService <- ZIO.service[GreetingHttpService]
+        config <- ZIO.service[ServerConfig]
         runtime <- ZIO.runtime[Clock with Blocking]
-      yield ServerImpl(greetingService)(using runtime)
+      yield ServerImpl(greetingService, config)(using runtime)
     )

@@ -6,7 +6,10 @@ ThisBuild / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 
 lazy val infrastructure = project
   .in(file("modules/infrastructure"))
-  .dependsOn(domain, application)
+  .dependsOn(domain, application, presentation)
+  .settings(
+    libraryDependencies ++= Dependencies.infrastructure
+  )
 
 lazy val domain = project
   .in(file("modules/domain"))
@@ -23,7 +26,7 @@ lazy val presentation = project
   )
 
 lazy val root = project
-  .in(file("modules/root"))
+  .in(file("."))
   .dependsOn(infrastructure, domain, application, presentation)
   .aggregate(infrastructure, domain, application, presentation)
   .settings(

@@ -28,7 +28,13 @@ object Dependencies {
     "org.slf4j" % "slf4j-api" % Versions.slf4j
   )
 
+  private val typesafeConfig = Seq(
+    "com.typesafe" % "config" % Versions.typesafeConfig
+  )
+
   val common = zio ++ zioTest ++ cats
+
+  val infrastructure = typesafeConfig
 
   val presentation = http4s ++ logback
 }
