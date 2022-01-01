@@ -7,5 +7,5 @@ class GreetingServiceImpl extends GreetingService:
     UIO.succeed(s"Hello, $name!")
 
 object GreetingServiceImpl:
-  val layer: ULayer[GreetingService] =
-    ZLayer.succeedMany(GreetingServiceImpl())
+  val layer: ULayer[Has[GreetingService]] =
+    ZLayer.succeed(GreetingServiceImpl())

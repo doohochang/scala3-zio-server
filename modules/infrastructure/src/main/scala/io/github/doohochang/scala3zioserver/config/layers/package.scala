@@ -14,3 +14,11 @@ package object layers:
         serverConfig <- ServerConfigLoader(config).load
       yield serverConfig
     )
+
+  val databaseConfig: RLayer[Has[Config], Has[DatabaseConfig]] =
+    ZLayer.fromEffect(
+      for
+        config <- ZIO.service[Config]
+        databaseConfig <- DatabaseConfigLoader(config).load
+      yield databaseConfig
+    )

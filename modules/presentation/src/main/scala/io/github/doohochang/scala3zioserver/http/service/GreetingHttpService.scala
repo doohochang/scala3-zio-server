@@ -21,5 +21,8 @@ class GreetingHttpService(service: GreetingService):
   }
 
 object GreetingHttpService:
-  val layer: URLayer[GreetingService, Has[GreetingHttpService]] =
-    ZLayer.fromFunction(GreetingHttpService(_))
+  val layer: URLayer[Has[GreetingService], Has[GreetingHttpService]] =
+    ZLayer.fromEffect(
+      for greetingService <- ZIO.service[GreetingService]
+      yield GreetingHttpService(greetingService)
+    )

@@ -29,8 +29,10 @@ class ServerImpl(greetingService: GreetingHttpService, config: ServerConfig)(
 
 object ServerImpl:
   val layer
-      : URLayer[Has[GreetingHttpService] with Has[ServerConfig] with Clock with Blocking, Server] =
-    ZLayer.fromEffectMany(
+      : URLayer[Has[GreetingHttpService] with Has[ServerConfig] with Clock with Blocking, Has[
+        Server
+      ]] =
+    ZLayer.fromEffect(
       for
         greetingService <- ZIO.service[GreetingHttpService]
         config <- ZIO.service[ServerConfig]

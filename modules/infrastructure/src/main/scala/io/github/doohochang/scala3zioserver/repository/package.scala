@@ -12,12 +12,14 @@ import zio.interop.catz.*
 import config.DatabaseConfig
 
 package object repository:
-  val transactorLayer: URLayer[Has[DatabaseConfig]
-    with Runtime[Clock with Blocking], Transactor[Task]] =
-    ZLayer.fromEffectMany(
+  val transactorLayer: URLayer[
+    Has[DatabaseConfig] with Clock with Blocking,
+    Has[Transactor[Task]]
+  ] =
+    ZLayer.fromEffect(
       for
         config <- ZIO.service[DatabaseConfig]
-        runtime <- ZIO.environment[Runtime[Clock with Blocking]]
+        runtime <- ZIO.runtime[Clock with Blocking]
       yield {
         given Runtime[Clock with Blocking] = runtime
 

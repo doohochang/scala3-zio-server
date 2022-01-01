@@ -34,3 +34,14 @@ class ArticleRepositoryImpl(transactor: Transactor[Task])(using
       .to[List]
       .transact(transactor)
       .map(_.head)
+
+object ArticleRepositoryImpl:
+  val layer: URLayer[Has[Transactor[Task]] with Clock with Blocking, Has[
+    ArticleRepository
+  ]] =
+    ZLayer.fromEffect(
+      for
+        transactor <- ZIO.service[Transactor[Task]]
+        runtime <- ZIO.runtime[Clock with Blocking]
+      yield ArticleRepositoryImpl(transactor)(using runtime)
+    )
