@@ -6,39 +6,37 @@ import zio.blocking.Blocking
 import config.*
 import repository.*
 import service.*
-import http.service.{ArticleHttpService, *}
-import http.{Server, ServerImpl}
+import http.*
 
 type RuntimeDeps = Clock with Blocking
-type ConfigDeps = Has[ServerConfig] with Has[DatabaseConfig]
-type RepositoryDeps = Has[ArticleRepository]
-type ServiceDeps = Has[GreetingService] with Has[ArticleService]
-type HttpServiceDeps = Has[GreetingHttpService] with Has[ArticleHttpService]
-type ServerDeps = Has[Server]
+type Configs = Has[ServerConfig] with Has[DatabaseConfig]
+type Repositories = Has[ArticleRepository]
+type Services = Has[GreetingService] with Has[ArticleService]
+type HttpRoutes = Has[GreetingHttpRoutes] with Has[ArticleHttpRoutes]
 
 @main def main(): Unit =
   val runtimeLayer: ULayer[RuntimeDeps] = Clock.live ++ Blocking.live
 
-  val configLayer: TaskLayer[ConfigDeps] =
+  val configLayer: TaskLayer[Configs] =
     rootConfigLayer >>> (serverConfigLayer ++ databaseConfigLayer)
 
-  val repositoryLayer: RLayer[ConfigDeps with RuntimeDeps, RepositoryDeps] =
+  val repositoryLayer: RLayer[Configs with RuntimeDeps, Repositories] =
     (
-      ZLayer.identity[ConfigDeps with RuntimeDeps]
+      ZLayer.identity[Configs with RuntimeDeps]
         >+> repository.transactorLayer
     ) >>> ArticleRepositoryImpl.layer
 
-  val serviceLayer: URLayer[RepositoryDeps, ServiceDeps] =
+  val serviceLayer: URLayer[Repositories, Services] =
     GreetingServiceImpl.layer ++ ArticleServiceImpl.layer
 
-  val httpServiceLayer: URLayer[ServiceDeps, HttpServiceDeps] =
-    GreetingHttpService.layer ++ ArticleHttpService.layer
+  val httpRoutesLayer: URLayer[Services, HttpRoutes] =
+    GreetingHttpRoutes.layer ++ ArticleHttpRoutes.layer
 
   val serverLayer: TaskLayer[Has[Server]] =
     (runtimeLayer ++ configLayer)
       >+> repositoryLayer
       >+> serviceLayer
-      >+> httpServiceLayer
+      >+> httpRoutesLayer
       >>> ServerImpl.layer
 
   val runServer =

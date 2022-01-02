@@ -12,11 +12,10 @@ import org.http4s.server.Router
 import org.http4s.server.middleware.Logger
 
 import config.ServerConfig
-import http.service.*
 
 class ServerImpl(
-    greetingService: GreetingHttpService,
-    articleService: ArticleHttpService,
+    greetingService: GreetingHttpRoutes,
+    articleService: ArticleHttpRoutes,
     config: ServerConfig
 )(using
     Runtime[Clock with Blocking]
@@ -36,14 +35,17 @@ class ServerImpl(
     build.serve.compile[Task, Task, ExitCode].drain
 
 object ServerImpl:
-  val layer
-      : URLayer[Has[GreetingHttpService] with Has[ArticleHttpService] with Has[ServerConfig] with Clock with Blocking, Has[
-        Server
-      ]] =
+  type Deps = Has[GreetingHttpRoutes]
+    with Has[ArticleHttpRoutes]
+    with Has[ServerConfig]
+    with Clock
+    with Blocking
+
+  val layer: URLayer[Deps, Has[Server]] =
     ZLayer.fromEffect(
       for
-        greetingService <- ZIO.service[GreetingHttpService]
-        articleService <- ZIO.service[ArticleHttpService]
+        greetingService <- ZIO.service[GreetingHttpRoutes]
+        articleService <- ZIO.service[ArticleHttpRoutes]
         config <- ZIO.service[ServerConfig]
         runtime <- ZIO.runtime[Clock with Blocking]
       yield ServerImpl(greetingService, articleService, config)(using runtime)
