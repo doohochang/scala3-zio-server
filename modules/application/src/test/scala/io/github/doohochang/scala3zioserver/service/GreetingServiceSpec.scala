@@ -11,7 +11,7 @@ object GreetingServiceSpec extends DefaultRunnableSpec:
       "GreetingServiceImpl should return a valid string for greeting."
     )(
       for
-        env <- ZIO.environment[GreetingService]
+        env <- ZIO.service[GreetingService]
         result1 <- env.greet("Dooho")
         result2 <- env.greet("Dooho Chang")
         result3 <- env.greet("1016")
