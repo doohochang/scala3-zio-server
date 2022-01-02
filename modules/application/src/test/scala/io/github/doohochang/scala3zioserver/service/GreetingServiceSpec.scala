@@ -12,10 +12,10 @@ object GreetingServiceSpec extends DefaultRunnableSpec:
     )(
       for
         env <- ZIO.service[GreetingService]
-        result1 <- env.greet("Dooho")
-        result2 <- env.greet("Dooho Chang")
+        result1 <- env.greet("Alice")
+        result2 <- env.greet("Bob White")
         result3 <- env.greet("1016")
-      yield assert(result1)(equalTo("Hello, Dooho!"))
-        && assert(result2)(equalTo("Hello, Dooho Chang!"))
+      yield assert(result1)(equalTo("Hello, Alice!"))
+        && assert(result2)(equalTo("Hello, Bob White!"))
         && assert(result3)(equalTo("Hello, 1016!"))
     ).provideLayer(GreetingServiceImpl.layer)
