@@ -3,11 +3,12 @@ package http
 
 import cats.effect.*
 import org.http4s.*
-import zio.{json as _, *}
+import zio.*
 import zio.json.*
 import zio.interop.catz.*
+
 import service.ArticleService
-import json.given
+import entity.json.given
 
 class ArticleHttpRoutes(articleService: ArticleService):
   import ArticleHttpRoutes.*

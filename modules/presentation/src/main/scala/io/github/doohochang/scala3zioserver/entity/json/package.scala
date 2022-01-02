@@ -1,8 +1,6 @@
-package io.github.doohochang.scala3zioserver
+package io.github.doohochang.scala3zioserver.entity
 
 import zio.json.*
-
-import entity.*
 
 package object json:
   given JsonEncoder[Article] = DeriveJsonEncoder.gen[Article]
