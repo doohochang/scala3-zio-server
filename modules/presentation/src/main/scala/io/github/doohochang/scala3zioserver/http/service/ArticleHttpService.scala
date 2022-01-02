@@ -2,19 +2,19 @@ package io.github.doohochang.scala3zioserver
 package http.service
 
 import cats.effect.*
-import zio.*
+import zio.{json as _, *}
 import zio.interop.catz.*
 import zio.json.*
 import org.http4s.*
 import org.http4s.dsl.Http4sDslBinCompat
 
 import entity.Article
-import entity.json.given
 import service.ArticleService
 
 class ArticleHttpService(service: ArticleService):
   import ArticleHttpService.*
   import dsl.*
+  import json.given
 
   val routes: HttpRoutes[Task] = HttpRoutes.of[Task] {
     case GET -> Root / "articles" / LongVar(id) =>

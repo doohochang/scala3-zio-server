@@ -20,7 +20,7 @@ type ServerDeps = Has[Server]
   val runtimeLayer: ULayer[RuntimeDeps] = Clock.live ++ Blocking.live
 
   val configLayer: TaskLayer[ConfigDeps] =
-    layers.rootConfig >>> (layers.serverConfig ++ layers.databaseConfig)
+    rootConfigLayer >>> (serverConfigLayer ++ databaseConfigLayer)
 
   val repositoryLayer: RLayer[ConfigDeps with RuntimeDeps, RepositoryDeps] =
     (
