@@ -11,6 +11,10 @@ object Dependencies {
     "dev.zio" %% "zio-test-sbt" % Versions.zio % "test"
   )
 
+  private val zioJson = Seq(
+    "dev.zio" %% "zio-json" % Versions.zioJson
+  )
+
   private val http4s = Seq(
     "org.http4s" %% "http4s-dsl" % Versions.http4s,
     "org.http4s" %% "http4s-blaze-server" % Versions.http4s,
@@ -47,5 +51,5 @@ object Dependencies {
 
   val infrastructure = typesafeConfig ++ doobie ++ testcontainers
 
-  val presentation = http4s ++ logback
+  val presentation = http4s ++ logback ++ zioJson
 }

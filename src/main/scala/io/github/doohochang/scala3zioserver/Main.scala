@@ -6,14 +6,14 @@ import zio.blocking.Blocking
 import config.*
 import repository.*
 import service.*
-import http.service.*
+import http.service.{ArticleHttpService, *}
 import http.{Server, ServerImpl}
 
 type RuntimeDeps = Clock with Blocking
 type ConfigDeps = Has[ServerConfig] with Has[DatabaseConfig]
 type RepositoryDeps = Has[ArticleRepository]
 type ServiceDeps = Has[GreetingService] with Has[ArticleService]
-type HttpServiceDeps = Has[GreetingHttpService]
+type HttpServiceDeps = Has[GreetingHttpService] with Has[ArticleHttpService]
 type ServerDeps = Has[Server]
 
 @main def main(): Unit =
@@ -32,7 +32,7 @@ type ServerDeps = Has[Server]
     GreetingServiceImpl.layer ++ ArticleServiceImpl.layer
 
   val httpServiceLayer: URLayer[ServiceDeps, HttpServiceDeps] =
-    GreetingHttpService.layer
+    GreetingHttpService.layer ++ ArticleHttpService.layer
 
   val serverLayer: TaskLayer[Has[Server]] =
     (runtimeLayer ++ configLayer)

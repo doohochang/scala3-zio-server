@@ -5,6 +5,7 @@ object Versions {
 
   val zio = "1.0.12"
   val zioCatsInterop = "3.2.9.0"
+  val zioJson = "0.2.0-M3"
   val catsCore = "2.7.0"
   val catsEffect = "3.3.1"
   val http4s = "0.23.7"
