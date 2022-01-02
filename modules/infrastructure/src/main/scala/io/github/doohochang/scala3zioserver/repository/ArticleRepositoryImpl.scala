@@ -16,10 +16,10 @@ class ArticleRepositoryImpl(transactor: Transactor[Task])(using
 ) extends ArticleRepository:
 
   def get(id: Long): Task[Option[Article]] =
-    sql"""select id, name, content, author_name, view_count 
+    sql"""select id, name, content, author_name
         from articles 
         where id = $id"""
-      .query[(Long, String, String, String, Long)]
+      .query[(Long, String, String, String)]
       .map(Article.apply.tupled)
       .to[List]
       .transact(transactor)
@@ -28,8 +28,8 @@ class ArticleRepositoryImpl(transactor: Transactor[Task])(using
   def create(name: String, content: String, authorName: String): Task[Article] =
     sql"""INSERT INTO articles (name, content, author_name)
          VALUES ($name, $content, $authorName)
-         RETURNING id, name, content, author_name, view_count"""
-      .query[(Long, String, String, String, Long)]
+         RETURNING id, name, content, author_name"""
+      .query[(Long, String, String, String)]
       .map(Article.apply.tupled)
       .to[List]
       .transact(transactor)

@@ -3,7 +3,5 @@ CREATE TABLE IF NOT EXISTS articles (
     name VARCHAR(255) NOT NULL,
     content text NOT NULL,
     author_name VARCHAR(255) NOT NULL,
-    view_count int DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
